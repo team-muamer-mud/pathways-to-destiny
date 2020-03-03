@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ['https://pathwaystodestiny.herokuapp.com']
 
 INSTALLED_APPS = [
     'users.apps.UsersConfig',
-    'crispy_forms',
+    'django_crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
