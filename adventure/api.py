@@ -18,7 +18,10 @@ def initialize(request):
     player = user.player
     player_id = player.id
     world = Room.objects.all()
-    worldRooms = [r for r in world]
+    worldRooms = []
+    for r in world:
+        worldRooms.append({'id': r.id, 'x': r.x, 'y': r.y, 'title': r.title})
+        
         
     uuid = player.uuid
     room = player.room()
