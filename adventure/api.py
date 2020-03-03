@@ -17,10 +17,11 @@ def initialize(request):
     user = request.user
     player = user.player
     player_id = player.id
+    world = Room.objects.all()
     uuid = player.uuid
     room = player.room()
     players = room.playerNames(player_id)
-    return JsonResponse({'uuid': uuid, 'name':player.user.username, 'title':room.title, 'description':room.description, 'players':players}, safe=True)
+    return JsonResponse({'uuid': uuid, 'world': world, 'name':player.user.username, 'title':room.title, 'description':room.description, 'players':players}, safe=True)
 
 @csrf_exempt
 @api_view(["GET"])
@@ -33,7 +34,7 @@ def get_rooms(request):
         res[r.key] = {'dbid': r.id, 'key': r.key, 'title':r.title, 'description':r.description, 'n_to':r.n_to, 's_to': r.s_to,'e_to':r.e_to,"w_to": r.w_to,"x": r.x, "y": r.y,}
     res_dict['rooms'] = res
     return JsonResponse(res_dict)
-    
+
 # @csrf_exempt
 @api_view(["POST"])
 def move(request):
