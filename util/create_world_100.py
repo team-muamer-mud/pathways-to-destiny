@@ -54,8 +54,8 @@ for i in range(len(adj)):
 class World:
     def __init__(self):
         self.grid = None
-        self.width = 12
-        self.height = 12
+        self.width = 10
+        self.height = 10
     def is_in_grid(self, direction, x, y):
         if direction == 'w':
             return self.grid[y][x - 1]
