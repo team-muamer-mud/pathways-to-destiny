@@ -32,7 +32,6 @@ shuffle(adj)
 shuffle(nouns)
 rooms = []
 descriptions = []
-# **************************************************************************
 all_rooms = Room.objects.all()
 counter = 0
 for r in all_rooms:
@@ -41,16 +40,13 @@ for r in all_rooms:
     r.save()
     counter += 1
 
-# **************************************************************************
 for i in range(len(adj)):
     for j in range(len(adj)):
         rooms.append(adj[i] + " " + nouns[j][0])
-# **************************************************************************
 
 for i in range(len(adj)):
     for j in range(len(adj)): 
         descriptions.append(f"{nouns[j][1]} You feel {adj[i].lower()} here.")
-# **************************************************************************
 class World:
     def __init__(self):
         self.grid = None
@@ -75,46 +71,34 @@ class World:
         elif direction == 's':
             return (y - 1) < 0
     def generate_rooms(self):
-        # Initialize the grid
         self.grid = [None] * self.height
         for i in range( len(self.grid) ):
             self.grid[i] = [None] * self.width
-        # start from middle of the bottom row
         seed_x = self.width // 2
         seed_y = self.height // 2
         x = seed_x
         y = seed_y
         room_count = 0
-        # seed the first room
         seed_room = Room(title=rooms[0], description=descriptions[0], x=x, y=y)
         seed_room.save()
         self.grid[y][x] = seed_room
         room_count += 1
-        # start players in seed room
         players = Player.objects.all()
         for p in players:
             p.currentRoom=seed_room.id
             p.save()
-        # While there are rooms to be created...
         while room_count < 100:
             print(room_count)
-            # never travel south
             directions = ['w', 'n', 'e', 's']
             prev_direction = None
-            # start at the seed room
             previous_room = seed_room.id
-            # reset x and y coordinates
             x = seed_x
             y = seed_y
-            # find a random direction
             direction = directions[randint(0, 3)]
             can_move = True
-            # traverse rooms...
             while can_move == True:
-                # if no room in grid
                 print(room_count)
                 if not self.is_out_of_bounds(direction, x, y) and self.is_in_grid(direction, x, y) is None:
-                    # update coordinate value
                     if direction == 'w':
                         x -= 1
                     elif direction == 'n':
@@ -123,25 +107,14 @@ class World:
                         x += 1
                     elif direction == 's':
                         y -= 1
-                    # Create a room in the given direction
                     room = Room(title=rooms[room_count], description=descriptions[room_count], x=x, y=y)
-                    # save room 
                     room.save()
-                    # Save the room in the World grid
                     self.grid[y][x] = room
-                    # Connect the new room to the previous room
-                    # previous_room.connectRooms(room, direction)
                     Room.objects.get(id=previous_room).connectRooms(room, direction)
-                    # Update iteration variables
                     room_count += 1
                     can_move = False
-                # if room in grid and prev room is connected to target room,
-                # elif previous_room.getRoomInDirection(direction) != 0:
                 elif getattr(Room.objects.get(id=previous_room), f"{direction}_to") != 0:
-                    # move to that room
-                    # previous_room = getattr(previous_room, f"{direction}_to")
                     previous_room = getattr(Room.objects.get(id=previous_room), f"{direction}_to")
-                    # update coordinate value
                     if direction == 'w':
                         x -= 1
                     elif direction == 'n':
@@ -150,7 +123,6 @@ class World:
                         x += 1
                     elif direction == 's':
                         y -= 1
-                    # find a new random direction
                     prev_direction = direction
                     if prev_direction == 'e':
                         directions = ['n', 'e', 's']
@@ -161,12 +133,9 @@ class World:
                     elif prev_direction == 's':
                         directions = ['w', 's', 'e']
                     direction = directions[randint(0, 2)]
-                # if room is outside bounds OR if room in grid and prev room not connected to target room
                 elif self.is_out_of_bounds(direction, x, y) or getattr(Room.objects.get(id=previous_room), f"{direction}_to") == 0:
-                    # if no directions available
                     if directions == None:
                         can_move = False
-                    # try again in available directions
                     elif len(directions) == 4:
                         if prev_direction == 'e':
                             directions = ['n', 'e', 's']
@@ -203,5 +172,4 @@ class World:
                         elif prev_direction == 's':
                             direction = 'e'
                         directions = None
-# **************************************************************************
 World().generate_rooms()
