@@ -155,6 +155,6 @@ STATIC_URL = '/static/'
 import django_heroku
 django_heroku.settings(locals())
 
-REGISTRATION_URL = reverse_lazy('account:registration')
-LOGIN_REDIRECT_URL = reverse_lazy('account:login')
-LOGOUT_REDIRECT_URL = reverse_lazy('account:logout')
+# REGISTRATION_URL = reverse_lazy('account:registration')
+# LOGIN_REDIRECT_URL = reverse_lazy('account:login')
+# LOGOUT_REDIRECT_URL = reverse_lazy('account:logout')
