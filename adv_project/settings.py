@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from decouple import config
+from django.urls import reverse_lazy
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -154,4 +155,6 @@ STATIC_URL = '/static/'
 import django_heroku
 django_heroku.settings(locals())
 
-LOGIN_REDIRECT_URL = ''
+REGISTRATION_URL = reverse_lazy('account:registration')
+LOGIN_REDIRECT_URL = reverse_lazy('account:login')
+LOGOUT_REDIRECT_URL = reverse_lazy('account:logout')
