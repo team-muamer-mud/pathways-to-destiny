@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-# from pusher import Pusher
+from pusher import Pusher
 from django.http import JsonResponse
 from decouple import config
 from django.contrib.auth.models import User
@@ -9,7 +9,8 @@ from rest_framework.decorators import api_view
 import json
 
 # instantiate pusher
-# pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
+pusher = Pusher(app_id=config('957774'), key=config('e21ba1b1e7a9aec5b48a'), secret=config('f87a598fe73967a57c2b'), cluster=config('us3'))
+# initiate and subscribe to pusher channel?
 
 @csrf_exempt
 @api_view(["GET"])
@@ -67,11 +68,13 @@ def move(request):
         players = nextRoom.playerNames(player_id)
         currentPlayerUUIDs = room.playerUUIDs(player_id)
         nextPlayerUUIDs = nextRoom.playerUUIDs(player_id)
+
         # for p_uuid in currentPlayerUUIDs:
         #     pusher.trigger(f'p-channel-{p_uuid}', u'broadcast', {'message':f'{player.user.username} has walked {dirs[direction]}.'})
         # for p_uuid in nextPlayerUUIDs:
         #     pusher.trigger(f'p-channel-{p_uuid}', u'broadcast', {'message':f'{player.user.username} has entered from the {reverse_dirs[direction]}.'})
         return JsonResponse({'name':player.user.username, 'title':nextRoom.title, 'description':nextRoom.description, "id" : nextRoom.id, "x": nextRoom.x, "y": nextRoom.y, 'n_to':nextRoom.n_to, 's_to': nextRoom.s_to,'e_to':nextRoom.e_to,"w_to": nextRoom.w_to, 'players':players, 'error_msg':""}, safe=True)
+
     else:
         players = room.playerNames(player_id)
         return JsonResponse({'name':player.user.username, 'title':room.title, "id" : room.id, "x": room.x, "y": room.y, 'n_to':room.n_to, 's_to': room.s_to, 'e_to':room.e_to, "w_to": room.w_to, 'description':room.description, 'players':players, 'error_msg':"You cannot move that way."}, safe=True)
