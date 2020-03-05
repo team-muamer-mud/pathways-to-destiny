@@ -65,18 +65,18 @@ def save_user_player(sender, instance, **kwargs):
     instance.player.save()
 
 
-class Item():
-    def __init__(self, name, description):
-        self.name = name
-        self.description = description
+# class Item():
+#     def __init__(self, name, description):
+#         self.name = name
+#         self.description = description
 
-    def __str__(self):
-        return "{}\n=====\n{}\nValue: {}\n".format(self.name, self.description)
+#     def __str__(self):
+#         return "{}\n=====\n{}\nValue: {}\n".format(self.name, self.description)
 
-class StartingItem(Item):
-    def __init__(self, value):
-        super().__init__(name="Lucky Locket",
-                        description="An unassuming but beautiful locket")
+# class StartingItem(Item):
+#     def __init__(self, value):
+#         super().__init__(name="Lucky Locket",
+#                         description="An unassuming but beautiful locket")
 
 
 
